@@ -30,7 +30,7 @@ Route::group(['middleware' => 'guest:api'], function (){
 });
 
 
-Route::group(['middleware' => 'auth:api'], function (){
+// Route::group(['middleware' => 'auth:api'], function (){
 
     /* all permissions without group name
     */
@@ -82,4 +82,4 @@ Route::group(['middleware' => 'auth:api'], function (){
 
 
 
-});
+// });
