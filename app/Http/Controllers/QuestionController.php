@@ -2,9 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Daily_quiz;
 use App\Models\Question;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
+
 class QuestionController extends Controller
 {
     /**
@@ -16,6 +19,28 @@ class QuestionController extends Controller
     {
         $questions = Question::paginate(5);
         return $this->dataResponse([$questions], 'All questions Retrieved  Successfully');
+        // return $this->paginateCollection([$questions],5, 'All category Retrieved  Successfully');
+
+
+    }
+    public function filter(Request $request)
+    {
+        $questions = Question::orderBy('id', 'DESC');
+
+        if (!empty($request->get("language_id"))) {
+            $questions->where('language_id', '=', $request->get("language_id"));
+        }
+        if (!empty($request->get("category_id"))) {
+            $questions->where('category_id', '=', $request->get("category_id"));
+        }
+        if (!empty($request->get("sub_category_id"))) {
+            $questions->where('sub_category_id', '=', $request->get("sub_category_id"));
+        }
+        $questions = $questions->paginate(5);
+
+        return $this->dataResponse([$questions], 'All questions Retrieved  Successfully');
+        // return $this->paginateCollection([$questions],5, 'All category Retrieved  Successfully');
+
     }
 
     /**
@@ -39,7 +64,7 @@ class QuestionController extends Controller
         $input = $request->except(['image']);
 
         $validator = Validator::make($input, [
-            'ar_name' => 'required',
+            // 'ar_name' => 'required',
             // 'language_id' => 'required'
         ]);
 
@@ -153,5 +178,65 @@ class QuestionController extends Controller
         $file->move($uploadPath, $imageName);
 
         return $imageName;
+    }
+
+// add daily quiz
+    public function addDailyQuize(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($request->all(), [
+            'question' => 'required',
+            // 'language_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        }
+
+        $data = $request->get('question');
+        if ($inputs) {
+            foreach ($data as $key => $obj) {
+                foreach ($obj as  $objIn) {
+                $daily = new Daily_quiz();
+                $daily->language_id = $request->get('language_id');
+                $daily->questions_id = $objIn;
+                $daily->date_published = Carbon::parse($request->get('date_published'));
+                $daily->save();
+            }
+        }
+        }
+        $daily = Daily_quiz::paginate(5);
+        // return $this->paginateCollection([$daily],5, 'All category Retrieved  Successfully');
+
+        return $this->dataResponse([$daily], 'All daily questions Retrieved  Successfully');
+    }
+    //delete daily quiz
+    public function deleteDailyQuize($id){
+        $question = Daily_quiz::find($id);
+        if (is_null($question)) {
+            return $this->sendError('daily question not found.');
+
+        }
+        $question->delete();
+        return $this->successResponse(null, 'daily question delete successfully.');
+    }
+
+    //filter daily quiz
+    public function daily_filter(Request $request)
+    {
+        $daily = Daily_quiz::orderBy('id', 'DESC');
+
+        if (!empty($request->get("language_id"))) {
+            $daily->where('language_id', '=', $request->get("language_id"));
+        }
+        if (!empty($request->get("questions_id"))) {
+            $daily->where('questions_id', '=', $request->get("questions_id"));
+        }
+
+        $questions = $daily->paginate(5);
+// dd($questions);
+        return $this->dataResponse([$questions], 'All questions Retrieved  Successfully');
+        // return $this->paginateCollection($questions, 'All category Retrieved  Successfully');
+
     }
 }

@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Language as ModelsLanguage;
 use Illuminate\Http\Request;
-use JetBrains\PhpStorm\Language;
 use Validator;
 
 class CategoryController extends Controller
@@ -21,6 +20,8 @@ class CategoryController extends Controller
         $category = Category::paginate(5);
         $langs = ModelsLanguage::get();
         return $this->dataResponse([$category, $langs], 'All category Retrieved  Successfully');
+        // return $this->paginateCollection([$category, $langs],5, 'All category Retrieved  Successfully');
+
 
     }
 
@@ -46,7 +47,7 @@ class CategoryController extends Controller
         $input = $request->except(['image']);
 
         $validator = Validator::make($input, [
-            'ar_name' => 'required',
+            // 'ar_name' => 'required',
             // 'language_id' => 'required'
         ]);
 
@@ -120,7 +121,11 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
         }
+        if ($request->hasFile('image')) {
+            $attach_image = $request->file('image');
 
+            $input['image'] = $this->UplaodImage($attach_image);
+        }
         $category->update($input);
 
         return $this->dataResponse($category->toArray(), 'category update successfully.');
@@ -161,14 +166,20 @@ class CategoryController extends Controller
 
         return $imageName;
     }
-    public function order(Request $request){
+    public function order(Request $request)
+    {
+        $inputs = $request->all();
 
-//         $categories = explode(",", $this->input->post('row_order'));
-//         for ($i = 0; $i < count($id_ary); $i++) {
-//             $this->db->query("UPDATE tbl_category SET row_order='$i' WHERE id='$id_ary[$i]'");
-//         }
-// if(){
+        $data=[];
+        foreach ($inputs as $key=>$obj) {
+            $category = Category::find($obj['id']);
+            if ($category) {
+                $category->update(['order' => $obj['order']]);
+                array_push($data,$category);
 
-// }
+            }
+        }
+
+        return $this->dataResponse($data, 'category update successfully.');
     }
 }

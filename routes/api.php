@@ -30,7 +30,7 @@ Route::group(['middleware' => 'guest:api'], function (){
 });
 
 
-// Route::group(['middleware' => 'auth:api'], function (){
+Route::group(['middleware' => 'auth:api'], function (){
 
     /* all permissions without group name
     */
@@ -70,16 +70,23 @@ Route::group(['middleware' => 'guest:api'], function (){
     * this is the url for get all roles
     */
    Route::post('/roles/store ', [AclController::class, 'store']);
-
+});
+//test
    // category
     Route::resource('category',  CategoryController::class);
-    //order
-    Route::get('/category-order', [CategoryController::class, 'order']);
+      //order
+      Route::post('/category-order', [CategoryController::class, 'order']);
     // subCategory
     Route::resource('subCategory', SubcategoryController::class);
+     //order
+     Route::post('/subCategory-order', [SubcategoryController::class, 'order']);
     // questions
     Route::resource('questions', QuestionController::class);
+    Route::post('/filter-questions', [QuestionController::class, 'filter']);
 
-
+    //add Daily quiz
+    Route::post('/add-daily-quiz', [QuestionController::class, 'addDailyQuize']);
+    Route::delete('/delete-daily-quiz/{id}', [QuestionController::class, 'deleteDailyQuize']);
+    Route::post('/filter-daily-questions', [QuestionController::class, 'daily_filter']);
 
 // });

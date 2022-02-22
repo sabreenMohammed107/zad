@@ -13,7 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Controller extends BaseController
 {
-  
+
  /**
  * @OA\Info(title="kiwi Api", version="0.1")
   * @OA\SecurityScheme(
@@ -66,7 +66,7 @@ class Controller extends BaseController
 
         return response()->json($error, $code);
     }
-    
+
 
 /**
   * Gera a paginação dos itens de um array ou collection.
@@ -100,5 +100,45 @@ public function paginateCollection($items, $perPage = 15, $page = null, $options
         'total' => $lap->total(),
     ];
 }
+/**
+     * convert error from array to string.
+     *
+     * @return sreting.
+     */
+    public function convertErrorsToString($errorArray)
+    {
+        $valArr = array();
+        foreach ($errorArray->toArray() as $key => $value) {
+            $errStr = $key.' '.$value[0];
+            //return $errStr;
+            array_push($valArr, $errStr);
+        }
+        // if(!empty($valArr)){
+        //     $errStrFinal = implode(',', $valArr);
+        // }
+        return $this->sendError('Validation Error', $valArr);
+
+    }
+
+     /**
+     * return error response.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendError($error, $errorMessages = [], $code = 404)
+    {
+    	$response = [
+            'status' => false,
+            'message' => $error,
+        ];
+
+
+        if(!empty($errorMessages)){
+            $response['data'] = $errorMessages;
+        }
+
+
+        return response()->json($response, $code);
+    }
 
 }

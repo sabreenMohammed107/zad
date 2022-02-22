@@ -20,6 +20,7 @@ class SubcategoryController extends Controller
         // $langs = Language::get();
         $subcategory = Subcategory::paginate(5);
         return $this->dataResponse([$subcategory], 'All Subcategory Retrieved  Successfully');
+        // return $this->paginateCollection([$subcategory],5, 'All category Retrieved  Successfully');
     }
 
     /**
@@ -158,5 +159,22 @@ class SubcategoryController extends Controller
         $file->move($uploadPath, $imageName);
 
         return $imageName;
+    }
+
+    public function order(Request $request)
+    {
+        $inputs = $request->all();
+
+        $data=[];
+        foreach ($inputs as $key=>$obj) {
+            $subcategory = Subcategory::find($obj['id']);
+            if ($subcategory) {
+                $subcategory->update(['order' => $obj['order']]);
+                array_push($data,$subcategory);
+
+            }
+        }
+
+        return $this->dataResponse($data, 'subcategory update successfully.');
     }
 }
