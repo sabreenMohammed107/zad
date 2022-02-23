@@ -7,6 +7,7 @@ use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
+use App\Models\Question_report;
 
 class QuestionController extends Controller
 {
