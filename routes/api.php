@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth:api'], function (){
     // questions
     Route::resource('questions', QuestionController::class);
     Route::post('/filter-questions', [QuestionController::class, 'filter']);
+  //question repoerts by users
+    Route::post('/report-questions', [QuestionController::class, 'report']);
 
     //add Daily quiz
     Route::post('/add-daily-quiz', [QuestionController::class, 'addDailyQuize']);

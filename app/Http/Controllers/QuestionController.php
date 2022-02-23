@@ -239,4 +239,9 @@ class QuestionController extends Controller
         // return $this->paginateCollection($questions, 'All category Retrieved  Successfully');
 
     }
+	
+	 public function report(){
+        $questions = Question_report::paginate(5);
+        return $this->dataResponse([$questions], 'All questions report by users  Retrieved  Successfully');
+    }
 }
