@@ -17,4 +17,11 @@ class Subcategory extends Model
     'order',
     'status',
     ];
+
+    public function category(){
+        return $this->belongsTo('App\Models\Category','category_id');
+      }
+      public function language(){
+        return $this->belongsTo('App\Models\Language','language_id');
+      }
 }

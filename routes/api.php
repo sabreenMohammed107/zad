@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth:api'], function (){
     Route::post('/category', [CategoryController::class, 'categoryMobile']);
 
     Route::post('/get_subcategory_by_maincategory', [CategoryController::class, 'subOfMain']);
-    
+
     //order
     Route::post('/category-order', [CategoryController::class, 'order']);
     // subCategory

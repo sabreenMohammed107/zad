@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\CategoriesResourceWeb;
 use App\Http\Resources\SubCategoriesResource;
 use App\Models\Category;
 use App\Models\Language as ModelsLanguage;
@@ -62,10 +63,7 @@ class CategoryController extends Controller
     {
 
         $category = Category::paginate(5);
-        $langs = ModelsLanguage::get();
-        return $this->dataResponse(['data'=> CategoriesResource::collection($category)]);
-        // return $this->paginateCollection([$category, $langs],5, 'All category Retrieved  Successfully');
-
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::collection($category)]);
 
     }
 
@@ -245,8 +243,9 @@ class CategoryController extends Controller
             $input['image'] = $this->UplaodImage($attach_image);
         }
         $category = Category::create($input);
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::make($category)]);
 
-        return $this->dataResponse($category->toArray(), 'category created successfully.');
+
     }
 
     /**
@@ -264,7 +263,8 @@ class CategoryController extends Controller
 
         }
 
-        return $this->dataResponse($category->toArray(), 'category retrieved successfully.');
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::make($category)]);
+
     }
 
     /**
@@ -282,7 +282,7 @@ class CategoryController extends Controller
 
         }
 
-        return $this->dataResponse($category->toArray(), 'category retrieved successfully.');
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::make($category)]);
     }
 
     /**
@@ -312,7 +312,7 @@ class CategoryController extends Controller
         }
         $category->update($input);
 
-        return $this->dataResponse($category->toArray(), 'category update successfully.');
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::make($category)]);
     }
 
     /**
@@ -324,6 +324,10 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
+        if (is_null($category)) {
+            return $this->sendError('category not found.');
+
+        }
         $category->delete();
         return $this->dataResponse(null, 'category delete successfully.');
 
@@ -343,7 +347,7 @@ class CategoryController extends Controller
 
         // Rename The Image ..
         $imageName = $name;
-        $uploadPath = public_path('uploads/category');
+        $uploadPath = storage_path('uploads/category');
 
         // Move The image..
         $file->move($uploadPath, $imageName);
@@ -364,6 +368,7 @@ class CategoryController extends Controller
             }
         }
 
-        return $this->dataResponse($data, 'category update successfully.');
+        return $this->dataResponse(['data'=> CategoriesResourceWeb::collection($category)]);
+
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubcategoryResourceWeb;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Subcategory;
@@ -19,7 +20,7 @@ class SubcategoryController extends Controller
         // $category = Category::get();
         // $langs = Language::get();
         $subcategory = Subcategory::paginate(5);
-        return $this->dataResponse([$subcategory], 'All Subcategory Retrieved  Successfully');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::collection($subcategory)]);
         // return $this->paginateCollection([$subcategory],5, 'All category Retrieved  Successfully');
     }
 
@@ -59,7 +60,7 @@ class SubcategoryController extends Controller
         }
         $subcategory = Subcategory::create($input);
 
-        return $this->dataResponse($subcategory->toArray(), 'Subcategory created successfully.');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::make($subcategory)]);
     }
 
     /**
@@ -77,7 +78,7 @@ class SubcategoryController extends Controller
 
         }
 
-        return $this->dataResponse($subcategory->toArray(), 'Subcategory retrieved successfully.');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::make($subcategory)]);
     }
 
     /**
@@ -96,7 +97,7 @@ class SubcategoryController extends Controller
 
         }
 
-        return $this->dataResponse($subcategory->toArray(), 'subcategory retrieved successfully.');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::make($subcategory)]);
     }
 
     /**
@@ -122,7 +123,7 @@ class SubcategoryController extends Controller
 
         $subcategory->update($input);
 
-        return $this->dataResponse($subcategory->toArray(), 'subcategory update successfully.');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::make($subcategory)]);
     }
 
     /**
@@ -134,6 +135,10 @@ class SubcategoryController extends Controller
     public function destroy($id)
     {
         $subcategory = Subcategory::find($id);
+        if (is_null($subcategory)) {
+            return $this->sendError('category not found.');
+
+        }
         $subcategory->delete();
         return $this->dataResponse(null, 'subcategory delete successfully.');
 
@@ -153,7 +158,7 @@ class SubcategoryController extends Controller
 
         // Rename The Image ..
         $imageName = $name;
-        $uploadPath = public_path('uploads/subCategory');
+        $uploadPath = storage_path('uploads/subCategory');
 
         // Move The image..
         $file->move($uploadPath, $imageName);
@@ -175,6 +180,6 @@ class SubcategoryController extends Controller
             }
         }
 
-        return $this->dataResponse($data, 'subcategory update successfully.');
+        return $this->dataResponse(['data'=> SubcategoryResourceWeb::collection($data)]);
     }
 }

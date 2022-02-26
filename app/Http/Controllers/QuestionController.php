@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionsResource;
+use App\Http\Resources\QuestionsResourceWeb;
 use App\Models\Daily_quiz;
 use App\Models\Question;
 use App\Models\Question_report;
@@ -20,7 +21,9 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::paginate(5);
-        return $this->dataResponse([$questions], 'All questions Retrieved  Successfully');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::collection($questions)]);
+        // return $this->dataResponse(['data'=> $questions]);
+
         // return $this->paginateCollection([$questions],5, 'All category Retrieved  Successfully');
 
 
@@ -40,7 +43,7 @@ class QuestionController extends Controller
         }
         $questions = $questions->paginate(5);
 
-        return $this->dataResponse([$questions], 'All questions Retrieved  Successfully');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::collection($questions)]);
         // return $this->paginateCollection([$questions],5, 'All category Retrieved  Successfully');
 
     }
@@ -81,7 +84,7 @@ class QuestionController extends Controller
         }
         $question = Question::create($input);
 
-        return $this->dataResponse($question->toArray(), 'Question created successfully.');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::make($question)]);
     }
 
     /**
@@ -99,7 +102,7 @@ class QuestionController extends Controller
 
         }
 
-        return $this->dataResponse($question->toArray(), 'Question retrieved successfully.');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::make($question)]);
     }
 
     /**
@@ -117,7 +120,7 @@ class QuestionController extends Controller
 
         }
 
-        return $this->dataResponse($question->toArray(), 'Question retrieved successfully.');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::make($question)]);
     }
 
     /**
@@ -143,7 +146,7 @@ class QuestionController extends Controller
 
         $question->update($input);
 
-        return $this->dataResponse($question->toArray(), 'question update successfully.');
+        return $this->dataResponse(['data'=> QuestionsResourceWeb::make($question)]);
     }
 
     /**
@@ -155,6 +158,10 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         $question = Question::find($id);
+        if (is_null($question)) {
+            return $this->sendError('category not found.');
+
+        }
         $question->delete();
         return $this->dataResponse(null, 'question delete successfully.');
 
@@ -174,8 +181,8 @@ class QuestionController extends Controller
 
         // Rename The Image ..
         $imageName = $name;
-        $uploadPath = public_path('uploads/question');
-
+        $uploadPath = storage_path('uploads/question');
+        // $file->storeAs('public/',$filename);
         // Move The image..
         $file->move($uploadPath, $imageName);
 
@@ -294,7 +301,7 @@ class QuestionController extends Controller
     *           property="limit",
     *           description="limt rows number",
     *           type="string",
-    *        ),              
+    *        ),
     *       ),
     *     ),
     *     ),
@@ -340,17 +347,17 @@ class QuestionController extends Controller
         if(isset($request->category))
         {
             $question = $questions->where('category_id',$request->category);
-        
+
         }
         if(isset($request->subcategory))
         {
             $question = $questions->where('sub_category_id',$request->subcategory)->firstOrFail();
-        
+
         }
         if(isset($request->language_id))
         {
             $question = $questions->where('language_id',$request->language_id);
-     
+
         }
         if(isset($request->limit))
         {
