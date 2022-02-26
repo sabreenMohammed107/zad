@@ -1,0 +1,356 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "kiwi Api",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "register new user",
+                "description": "Returns user data and token",
+                "operationId": "registeruser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of the new user.",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email address of the new user.",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "name  of the new user.",
+                                        "type": "string"
+                                    },
+                                    "c_password": {
+                                        "description": "password confirmation.",
+                                        "type": "string"
+                                    },
+                                    "firebase_id": {
+                                        "description": "firebase_id.",
+                                        "type": "string"
+                                    },
+                                    "mobile": {
+                                        "description": "mobile.",
+                                        "type": "string"
+                                    },
+                                    "profile": {
+                                        "description": "profile image.",
+                                        "type": "file"
+                                    },
+                                    "type": {
+                                        "description": "email / gmail / fb / mobile / apple",
+                                        "type": "string"
+                                    },
+                                    "fcm_id": {
+                                        "description": "fcm_id",
+                                        "type": "string"
+                                    },
+                                    "coins": {
+                                        "description": "coins.",
+                                        "type": "string"
+                                    },
+                                    "refer_code": {
+                                        "description": "refer_code.",
+                                        "type": "string"
+                                    },
+                                    "friends_code": {
+                                        "description": "friends_code.",
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "description": "1 - Active & 0 Deactive .",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "login new user",
+                "description": "Returns user data and token",
+                "operationId": "loginuser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "Email address of the new user.",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "name  of the new user.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/category": {
+            "get": {
+                "tags": [
+                    "categories web"
+                ],
+                "summary": "list categories ",
+                "description": "list categories ",
+                "operationId": "327644f4d836240fa297b2822ab6ca92",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "description": "1",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "list categories for mobile",
+                "description": "list categories for mobile",
+                "operationId": "categoryMobile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "description": "1",
+                                        "type": "string"
+                                    },
+                                    "language_id": {
+                                        "description": "1 or 2.",
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "description": "1",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/get_subcategory_by_maincategory": {
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "list sub categories for mobile",
+                "description": "list sub categories for mobile",
+                "operationId": "get sub category by main category",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category": {
+                                        "description": "1",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/get_questions_by": {
+            "post": {
+                "tags": [
+                    "questions"
+                ],
+                "summary": "filter questions fro mobile",
+                "description": "filter questions for mobile",
+                "operationId": "get_questions_by",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "description": "1",
+                                        "type": "string"
+                                    },
+                                    "language_id": {
+                                        "description": "1 or 2.",
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "description": "1",
+                                        "type": "string"
+                                    },
+                                    "level": {
+                                        "description": "1",
+                                        "type": "string"
+                                    },
+                                    "subcategory": {
+                                        "description": "sub category id",
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "description": "category id",
+                                        "type": "string"
+                                    },
+                                    "limit": {
+                                        "description": "limt rows number",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "401": {
+                "description": "Unauthenticated"
+            },
+            "403": {
+                "description": "Forbidden"
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
