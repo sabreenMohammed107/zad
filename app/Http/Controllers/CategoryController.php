@@ -2,8 +2,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\SubCategoriesResource;
 use App\Models\Category;
 use App\Models\Language as ModelsLanguage;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -14,14 +17,195 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    /**
+    * @OA\Get(
+    *
+     *      path="/api/category",
+    * tags={"categories web"},
+    *      summary="list categories ",
+    *      description="list categories ",
+    *
+    *     @OA\RequestBody(
+    *
+    *        @OA\MediaType(
+    *       mediaType="application/json",
+    *       @OA\Schema(
+    *        @OA\Property(
+    *           property="type",
+    *           description="1",
+    *           type="string",
+    *         ),
+    *
+    *
+    *       ),
+    *     ),
+    *     ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Successful operation",
+    *
+    *       ),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
     public function index()
     {
 
         $category = Category::paginate(5);
         $langs = ModelsLanguage::get();
-        return $this->dataResponse([$category, $langs], 'All category Retrieved  Successfully');
+        return $this->dataResponse(['data'=> CategoriesResource::collection($category)]);
         // return $this->paginateCollection([$category, $langs],5, 'All category Retrieved  Successfully');
 
+
+    }
+
+    /**
+    * @OA\Post(
+    *
+     *      path="/api/category",
+    *      operationId="categoryMobile",
+    *      tags={"categories"},
+    *      summary="list categories for mobile",
+    *      description="list categories for mobile",
+    *      security={{"Bearer": {}}},
+    *     @OA\RequestBody(
+    *         required=true,
+    *        @OA\MediaType(
+    *       mediaType="application/json",
+    *       @OA\Schema(
+    *        @OA\Property(
+    *           property="type",
+    *           description="1",
+    *           type="string",
+    *         ),
+    *            @OA\Property(
+    *           property="language_id",
+    *           description="1 or 2.",
+    *           type="string",
+    *         ),
+    *            @OA\Property(
+    *           property="id",
+    *           description="1",
+    *           type="string",
+    *        ),
+    *       ),
+    *     ),
+    *     ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Successful operation",
+    *
+    *       ),
+    *      @OA\Response(
+    *          response=400,
+    *          description="Bad Request"
+    *      ),
+    *      @OA\Response(
+    *          response=401,
+    *          description="Unauthenticated",
+    *      ),
+    *      @OA\Response(
+    *          response=403,
+    *          description="Forbidden"
+    *      )
+    * )
+    */
+
+    public function categoryMobile(Request $request)
+    {
+
+        $category = Category::query();
+        if(isset($request->id))
+        {
+            $category = $category->where('id',$request->id)->firstOrFail();
+            return $this->dataResponse(['data'=> new CategoriesResource($category)]);
+
+        }
+        if(isset($request->page))
+        {
+            $category = $category->paginate(5);
+        }
+        else
+        {
+            $category = $category->get();
+
+        }
+
+        return $this->dataResponse(['data'=> CategoriesResource::collection($category)]);
+
+    }
+/**
+    * @OA\Post(
+    *
+    *      path="/api/get_subcategory_by_maincategory",
+    *      operationId="get sub category by main category",
+    *      tags={"categories"},
+    *      summary="list sub categories for mobile",
+    *      description="list sub categories for mobile",
+    *      security={{"Bearer": {}}},
+    *     @OA\RequestBody(
+    *         required=true,
+    *        @OA\MediaType(
+    *       mediaType="application/json",
+    *       @OA\Schema(
+    *        @OA\Property(
+    *           property="category",
+    *           description="1",
+    *           type="string",
+    *        ),
+    *       ),
+    *     ),
+     *     ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
+    public function subOfMain(Request $request)
+    {
+
+        $categories = Subcategory::query();
+        if(isset($request->category))
+        {
+            $categories = $categories->where('category_id',$request->category);
+        }
+
+        if(isset($request->page))
+        {
+            $categories = $categories->paginate(5);
+        }
+
+        else
+        {
+            $categories = $categories->get();
+
+        }
+
+        return $this->dataResponse(['data'=> SubCategoriesResource::collection($categories)]);
 
     }
 

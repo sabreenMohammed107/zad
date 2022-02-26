@@ -21,6 +21,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        "firebase_id",
+        "mobile" ,
+        "profile",
+        "type",
+        'token' ,
+        "fcm_id" ,
+        "coins",
+        "refer_code",
+        "friends_code" ,
+        "status",
     ];
 
     /**

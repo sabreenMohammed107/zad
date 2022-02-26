@@ -13,6 +13,7 @@ class Question extends Model
         'category_id',
         'sub_category_id',
         'image',
+        'question',
         'question_type',
         'option_a',
         'option_b',

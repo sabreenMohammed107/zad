@@ -26,7 +26,7 @@ class AclController extends Controller
     {
 
         return response()->json([
-            'data' => $id ? \App\Model\User::find($id)->roles : Permission::all(),
+            'data' => $id ? \App\Models\User::find($id)->roles : Permission::all(),
         ]);
     }
 

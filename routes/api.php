@@ -70,25 +70,34 @@ Route::group(['middleware' => 'auth:api'], function (){
     * this is the url for get all roles
     */
    Route::post('/roles/store ', [AclController::class, 'store']);
-});
-//test
-   // category
-    Route::resource('category',  CategoryController::class);
-      //order
-      Route::post('/category-order', [CategoryController::class, 'order']);
+
+    // category
+    Route::resource('categories',  CategoryController::class);
+
+    Route::post('/category', [CategoryController::class, 'categoryMobile']);
+
+    Route::post('/get_subcategory_by_maincategory', [CategoryController::class, 'subOfMain']);
+    
+    //order
+    Route::post('/category-order', [CategoryController::class, 'order']);
     // subCategory
     Route::resource('subCategory', SubcategoryController::class);
-     //order
-     Route::post('/subCategory-order', [SubcategoryController::class, 'order']);
+        //order
+    Route::post('/subCategory-order', [SubcategoryController::class, 'order']);
     // questions
     Route::resource('questions', QuestionController::class);
+
     Route::post('/filter-questions', [QuestionController::class, 'filter']);
-  //question repoerts by users
+    //question repoerts by users
     Route::get('/report-questions', [QuestionController::class, 'report']);
 
     //add Daily quiz
     Route::post('/add-daily-quiz', [QuestionController::class, 'addDailyQuize']);
+
     Route::delete('/delete-daily-quiz/{id}', [QuestionController::class, 'deleteDailyQuize']);
+
     Route::post('/filter-daily-questions', [QuestionController::class, 'daily_filter']);
 
-// });
+    Route::post('/get_questions_by', [QuestionController::class, 'getQuestionsBy']);
+
+});

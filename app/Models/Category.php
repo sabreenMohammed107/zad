@@ -14,5 +14,6 @@ class Category extends Model
         'language_id',
         'image',
         'order',
+        'type',
     ];
 }

@@ -31,8 +31,8 @@ class Controller extends BaseController
     public function dataResponse($data , $message = null, $code = null){
 
         $success = [
-            'code' => $code ? $code : 200,
-            'message' => $message ? $message : 'success',
+            'message' => $code ? $code : 104,
+            'error' => false,
         ];
 
         $success = array_merge($success, $data);
