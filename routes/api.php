@@ -100,4 +100,7 @@ Route::group(['middleware' => 'auth:api'], function (){
 
     Route::post('/get_questions_by', [QuestionController::class, 'getQuestionsBy']);
 
+    // user data
+    Route::post('/get_user_by_id', [UserController::class, 'get_user_by_id']);
+
 });
