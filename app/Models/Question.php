@@ -23,6 +23,8 @@ class Question extends Model
         'answer',
         'level_id',
         'notes',
+        'quiz_id',
+        'quiz_type'
     ];
     public function category(){
         return $this->belongsTo('App\Models\Category','category_id');

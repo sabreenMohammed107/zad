@@ -67,10 +67,11 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $input = $request->except(['image']);
-
+// dd($input);
         $validator = Validator::make($input, [
-            // 'ar_name' => 'required',
-            // 'language_id' => 'required'
+            'question' => 'required',
+            'quiz_id' => 'required',
+
         ]);
 
         if ($validator->fails()) {
